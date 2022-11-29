@@ -49,3 +49,15 @@ app.post('/post', verify, upload.single('picture'), createPost);
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/posts', postRoutes);
+
+/* Mongoose setup */
+const PORT = process.env.PORT || 5000;
+const db = process.env.MONGO_URL;
+mongoose.connect(db,
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    }    
+)
+.then(() => { app.listen(PORT, () => console.log(`Server port: http://localhost:${PORT}`))})
+.catch((error) => console.log(`${error} did not correct`));
