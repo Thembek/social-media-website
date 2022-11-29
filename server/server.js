@@ -3,16 +3,19 @@ import path from 'path';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import multer from 'multer';
 import express from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import { fileURLToPath } from 'url';
 
-import authRoutes from './routes/auth.js';
+import authRoutes, { register} from './routes/auth.js';
 import userRoutes from './routes/users.js';
-import postRoutes from './routes/post.js';
+import postRoutes, { createPost } from './routes/post.js';
 import { users, posts } from './data/index.js';
+import { verify } from 'crypto';
 
+/* firewall */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config();
@@ -25,3 +28,24 @@ app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 app.use('/assets', express.static(path.joiin(__dirname, "public/assets")));
+
+/* storage */
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, file.originalname);
+    },
+    filename: function(req, file, cb) {
+        cb(null, file.originalname);
+    },
+});
+
+const upload = multer({ storage });
+
+/* File routes */
+app.post('/auth/register', upload.single('picture'), register);
+app.post('/post', verify, upload.single('picture'), createPost);
+
+/* routes */
+app.use('/auth', authRoutes);
+app.use('/users', userRoutes);
+app.use('/posts', postRoutes);

@@ -22,7 +22,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.post('/register', async (req, res) => {
+export const register = async (req, res) => {
     try {
         const { firstName, lastName, email, password, picturePath, friends, location, occupation, } = req.body;
         const salt = await bcrypt.genSalt();
