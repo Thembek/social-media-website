@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const userId = [
+const userIds = [
     new mongoose.Types.ObjectId(),
     new mongoose.Types.ObjectId(),
     new mongoose.Types.ObjectId(),
