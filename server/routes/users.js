@@ -1,5 +1,5 @@
 import User from '../models/User.js';
-import verify from '../middleware/verify';
+import verify from '../middleware/verify.js';
 import express from 'express';
 
 const router = express.Router();
